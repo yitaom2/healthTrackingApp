@@ -1,0 +1,109 @@
+✅ App-Building Prompt
+Build an iOS app called “SleepScore Lite” using Swift & SwiftUI.
+Below are the full requirements. Follow them exactly and generate the complete project structure, code files, data models, and placeholder UI.
+ 
+📌 App Summary
+SleepScore Lite is a minimalist sleep-rating app for Apple Watch users.
+It pulls sleep data from Apple Health, evaluates it against user sleep goals, produces a single daily rating, stores up to 10 years of history, and displays all days in a color-coded calendar.
+ 
+📌 Core MVP Requirements
+1. Sleep Goal Setup
+Create screens where the user sets:
+•	Bedtime start
+•	Bedtime end
+•	Wake window start
+•	Wake window end
+•	Daily target sleep hours
+Persist this locally.
+ 
+2. Apple Health Integration
+Use HealthKit to fetch:
+•	Sleep start timestamp
+•	Sleep end timestamp
+•	Sleep duration (sum of segments)
+Handle missing permissions gracefully.
+ 
+3. Rating Algorithm
+Implement this logic:
+If duration >= goalHours AND sleep start/end within user’s defined sleep window:
+    rating = Perfect (green)
+Else if duration >= goalHours:
+    rating = Good (light green)
+Else if (goalHours - duration) <= 1 hour:
+    rating = OK (yellow)
+Else:
+    rating = Not Meet (gray)
+Expose rating as an enum.
+ 
+4. Data Model (Persist 2 Years)
+Use CoreData or SQLite.
+Store:
+SleepDay {
+  date
+  actualStart
+  actualEnd
+  durationHours
+  rating {perfect, good, ok, not_meet}
+  source {apple_watch, manual}
+  createdAt
+  updatedAt
+}
+Must support 10 years (≈3650 days).
+ 
+5. Manual Adjustments
+User can tap a day → edit sleep start/end manually → re-run rating.
+ 
+6. Daily Sleep Card UI
+Show:
+•	Start time
+•	End time
+•	Total hours
+•	Rating color
+ 
+7. Calendar View
+Month grid UI with:
+•	A cell for each day
+•	Background color = rating color
+•	Ability to swipe or navigate months
+•	Tap to open detail view
+•	Support historical navigation for 10 years
+Performance must load a month in under 100ms.
+ 
+📌 Technical Requirements
+•	Language: Swift
+•	Framework: SwiftUI
+•	Local storage: CoreData or SQLite
+•	Sleep data: HealthKit sleepAnalysis
+•	Efficient calendar rendering (LazyVGrid recommended)
+•	Clean project structure:
+o	Models
+o	ViewModels
+o	Views
+o	Storage layer
+o	HealthKit wrapper
+o	Rating engine
+ 
+📌 Non-goals (do NOT implement in MVP)
+•	Sleep stages
+•	HRV or heart-rate integration
+•	Coaching or recommendations
+•	Notifications
+•	Cloud sync
+•	Subscriptions
+•	Apple Watch companion app
+ 
+📌 Deliverables
+Generate:
+•	Full SwiftUI project structure
+•	Core screens: Onboarding, Daily Card, Calendar View, Detail View, Settings
+•	Persistence layer
+•	Rating engine
+•	Mock data fallback mode (when no HealthKit access)
+•	Clean placeholder UI that compiles
+ 
+📌 Additional Instructions
+•	Use dummy data when building the UI so screens render properly in preview.
+•	Comment your code clearly.
+•	Use MVVM architecture.
+•	Follow Apple HIG where possible.
+•	Make sure navigation works end-to-end with sample data.
