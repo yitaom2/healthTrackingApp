@@ -261,9 +261,29 @@ struct CalendarView: View {
         let currentDay = calendar.startOfDay(for: recordStart)
         let previousDay = calendar.date(byAdding: .day, value: -1, to: currentDay)!
         
+        // Check if sleep session starts in early morning hours (before 6 AM)
+        let startHour = calendar.component(.hour, from: recordStart)
+        let startMinute = calendar.component(.minute, from: recordStart)
+        let totalStartMinutes = startHour * 60 + startMinute
+        
+        print("DEBUG: Sleep session \(recordStart) - \(recordEnd)")
+        print("DEBUG: Start time: \(startHour):\(String(format: "%02d", startMinute)) (\(totalStartMinutes) minutes)")
+        print("DEBUG: Current day: \(currentDay), Previous day: \(previousDay)")
+        
+        // If sleep starts before 6 AM (360 minutes), attribute to previous day
+        if totalStartMinutes < 360 {
+            print("DEBUG: Early morning rule applied - attributing to previous day: \(previousDay)")
+            return previousDay
+        }
+        
+        print("DEBUG: Not early morning, checking sleep windows...")
+        
         // Get sleep windows for current and previous day
         let currentDaySleepWindow = getSleepWindow(for: currentDay, with: goal, calendar: calendar)
         let previousDaySleepWindow = getSleepWindow(for: previousDay, with: goal, calendar: calendar)
+        
+        print("DEBUG: Current day sleep window: \(currentDaySleepWindow.start) - \(currentDaySleepWindow.end)")
+        print("DEBUG: Previous day sleep window: \(previousDaySleepWindow.start) - \(previousDaySleepWindow.end)")
         
         // Calculate overlap with previous day's sleep window
         let overlapWithPrevious = calculateOverlap(
@@ -281,10 +301,15 @@ struct CalendarView: View {
             windowEnd: currentDaySleepWindow.end
         )
         
+        print("DEBUG: Overlap with previous: \(overlapWithPrevious)s, overlap with current: \(overlapWithCurrent)s")
+        print("DEBUG: Record start < current window end: \(recordStart < currentDaySleepWindow.end)")
+        
         // Apply attribution logic
         if overlapWithPrevious > 0 || recordStart < currentDaySleepWindow.end {
+            print("DEBUG: Attribution logic applied - attributing to previous day: \(previousDay)")
             return previousDay
         } else {
+            print("DEBUG: No attribution conditions met - attributing to current day: \(currentDay)")
             return currentDay
         }
     }
