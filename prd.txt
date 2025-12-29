@@ -48,7 +48,7 @@ SleepDay {
   createdAt
   updatedAt
 }
-Must support 10 years (≈3650 days).
+Must support 2 years.
  
 5. Manual Adjustments
 User can tap a day → edit sleep start/end manually → re-run rating.
@@ -66,7 +66,7 @@ Month grid UI with:
 •	Background color = rating color
 •	Ability to swipe or navigate months
 •	Tap to open detail view
-•	Support historical navigation for 10 years
+•	Support historical navigation for 2 years
 Performance must load a month in under 100ms.
  
 📌 Technical Requirements

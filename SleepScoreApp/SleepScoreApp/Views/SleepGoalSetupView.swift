@@ -56,3 +56,7 @@ struct SleepGoalSetupView: View {
         }
     }
 }
+
+#Preview {
+    SleepGoalSetupView(goalManager: SleepGoalManager())
+}
